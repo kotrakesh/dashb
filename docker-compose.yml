@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: sh -c "python ./app/app.py"
+    ports:
+      - 8050:8050
+    env_file:
+      - .env   
+    volumes:
+      - ./app:/code/app

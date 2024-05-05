@@ -1,4 +1,4 @@
-from dash import Dash,dcc,html,Input,Output,callback
+from dash import Dash,dcc,html,Input,Output,callback,page_container,page_registry
 import plotly.express as px
 import pandas as pd
 import os
@@ -32,36 +32,18 @@ app = Dash(__name__,
             "name": "viewport",
             "content": "width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no",
         }
-    ],
-)
+    ], use_pages=True)
+
 app.title = "Sales Report retial"
 app.layout= html.Div([
-    dcc.Graph(id='graph-with-slider', className="dash-bootstrap",),
-    dcc.Slider(
-        df7['year'].min(),
-        df7['year'].max(),
-        step=None,
-        value=df7['year'].min(),
-        marks={str(year): str(year) for year in df7['year'].unique()},
-        id='year-slider'
-
-    )
+   
+    html.Div([
+        html.Div(
+            dcc.Link(f"{page['name']} - {page['path']}", href=page["relative_path"])
+        ) for page in page_registry.values()
+    ]),
+    page_container
 ])
-
-@callback(
-    Output('graph-with-slider','figure'),
-    Input('year-slider','value'))
-
-def update_figure(selected_year):
-    filtered_df= df7[df7.year == selected_year]
-    fig= px.line(filtered_df, x="month", y="Amount", color='Country_x') 
-    #fig = px.scatter(filtered_df, x="month", y="Amount",
-    #                 size="Quantity", color="Continent", hover_name="Country_x",
-    #                log_x=True,size_max=55)
-    fig.layout.template = "plotly_dark"
-    fig.update_layout(transition_duration=500)
-
-    return fig
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8050)

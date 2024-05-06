@@ -6,19 +6,19 @@ import os
 
 dash.register_page(__name__,path='/products')
 
-p = os.getcwd()
-df1=pd.read_csv(p+"\data\Sales.csv")
+p = "https://raw.githubusercontent.com/kotrakesh/dashb/master/data/"
+df1=pd.read_csv(p+"Sales.csv")
 df1['Date'] = pd.to_datetime(df1['Order Date'])
 df1['year'] = df1['Date'].dt.year
 df1['month'] = df1['Date'].dt.month
 
-df2=pd.read_csv(p+"\data\Customers.csv", encoding='unicode_escape')
+df2=pd.read_csv(p+"Customers.csv", encoding='unicode_escape')
 df3 = df1.merge(df2, on='CustomerKey')
 
-df4=pd.read_csv(p+"\data\Products.csv")
+df4=pd.read_csv(p+"Products.csv")
 df5=df3.merge(df4,on='ProductKey')
 
-df6=pd.read_csv(p+"\data\Stores.csv")
+df6=pd.read_csv(p+"Stores.csv")
 df7=df5.merge(df6,on='StoreKey')
 df7['Price'] = df7['Unit Price USD'].str.split(pat='$',n=1).str[1]
 df7['Price'] = df7['Price'].str.replace(r',', '').astype(float)

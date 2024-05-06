@@ -23,15 +23,15 @@ df7=df5.merge(df6,on='StoreKey')
 df7['Price'] = df7['Unit Price USD'].str.split(pat='$',n=1).str[1]
 df7['Price'] = df7['Price'].str.replace(r',', '').astype(float)
 df7['Amount'] = df7['Price']*df7['Quantity']
-df7 = df7.groupby(["year","Continent", "Category", "Product Name"])["Amount"].sum().reset_index()
-df7 = df7.sort_values(["Category", "Amount"], ascending=[True, False])
-#print(df7.head(20))
+df7 = df7.groupby(["year","Continent", "Category", "Product Name"],group_keys=False)["Amount"].sum().reset_index()
+df7 = df7.sort_values(["Category"], ascending=[True])
+
 
 title = "Sales Report - product details"
 category_options = df7['Category'].unique()
 continent_options = df7['Continent'].unique()
 layout= html.Div([
-    html.H1('Top Products'),
+    html.H1('Top Sold Products'),
     html.Div([
             dcc.Dropdown(
                 category_options,
@@ -66,12 +66,13 @@ layout= html.Div([
     Input('year-slider','value'),
     Input('category-filter', 'value'),
     Input('continent-filter', 'value'))
-
+    
 def update_figure(selected_year,category,continent):
     filtered_df= df7[(df7.year == selected_year)]
     filtered_df= filtered_df[filtered_df.Continent == continent]
     filtered_df= filtered_df[filtered_df.Category == category].head(5)
     fig= px.bar(filtered_df, x="Product Name", y="Amount", color='Product Name') 
+    fig.update_xaxes(tickangle=0, title_text="Products",showticklabels=False) 
     fig.layout.template = "plotly_dark"
     fig.update_layout(transition_duration=500)
 

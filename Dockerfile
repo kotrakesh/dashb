@@ -11,5 +11,5 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 # 
 COPY ./app /code/app
-#Running your APP and doing some PORT Forwarding
-CMD ["python","./app/app.py"]
+#
+CMD ["python","./app/app.py", "--host", "0.0.0.0", "--port", "8050"]

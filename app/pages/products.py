@@ -23,16 +23,13 @@ df7=df5.merge(df6,on='StoreKey')
 df7['Price'] = df7['Unit Price USD'].str.split(pat='$',n=1).str[1]
 df7['Price'] = df7['Price'].str.replace(r',', '').astype(float)
 df7['Amount'] = df7['Price']*df7['Quantity']
-#print(df7.head(10))
-#df7 = df7.groupby(["year","month","Category","Product Name"],as_index=False).sum("Amount").nlargest(10, "Amount")
 df7 = df7.groupby(["year","Continent", "Category", "Product Name"])["Amount"].sum().reset_index()
 df7 = df7.sort_values(["Category", "Amount"], ascending=[True, False])
-print(df7.head(20))
+#print(df7.head(20))
 
 title = "Sales Report - product details"
 category_options = df7['Category'].unique()
 continent_options = df7['Continent'].unique()
-print(category_options[0])
 layout= html.Div([
     html.H1('Top Products'),
     html.Div([

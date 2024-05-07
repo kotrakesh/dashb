@@ -30,7 +30,7 @@ df7 = df7.groupby(["year","month","Continent","Country_x"],as_index=False).sum("
 title = "Sales Report retial"
 layout= html.Div([
     html.H1('Sales Overview'),
-    dcc.Graph(id='graph-with-slider', className="dash-bootstrap",),
+    dcc.Graph(id='graph-with-slider', className="dash-bootstrap"),
     dcc.Slider(
         df7['year'].min(),
         df7['year'].max(),
@@ -49,9 +49,6 @@ layout= html.Div([
 def update_figure(selected_year):
     filtered_df= df7[df7.year == selected_year]
     fig= px.line(filtered_df, x="month", y="Amount", color='Country_x') 
-    #fig = px.scatter(filtered_df, x="month", y="Amount",
-    #                 size="Quantity", color="Continent", hover_name="Country_x",
-    #                log_x=True,size_max=55)
     fig.layout.template = "plotly_dark"
     fig.update_layout(transition_duration=500)
 

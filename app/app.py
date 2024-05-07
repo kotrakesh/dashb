@@ -16,11 +16,12 @@ app.layout= html.Div([
    
     html.Div([
         html.Div(
-            dcc.Link(f"{page['name']} - {page['path']}", href=page["relative_path"])
+            dcc.Link(f"{page['name']}", href=page["relative_path"])
         ) for page in page_registry.values()
-    ]),
-    page_container
-])
+    ],className="column menu", style={'width': '10%', 'display': 'inline-block'}),
+    html.Div([
+        page_container],className="column", style={'width': '78%', 'display': 'inline-block'})
+],className="container")
 
 port = os.environ.get('dash_port')
 debug = os.environ.get('dash_debug')=="True"
